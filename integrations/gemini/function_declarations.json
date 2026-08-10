@@ -1,0 +1,86 @@
+[
+  {
+    "name": "save_entry",
+    "description": "Save a private reflection, memory, proud moment, note, or voice time capsule.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "kind": {"type": "string", "enum": ["reflection", "memory", "proud_moment", "note", "time_capsule"]},
+        "title": {"type": "string"},
+        "content": {"type": "string"},
+        "transcript": {"type": "string"},
+        "tags": {"type": "array", "items": {"type": "string"}},
+        "context": {"type": "string"}
+      },
+      "required": ["kind", "content"]
+    }
+  },
+  {
+    "name": "create_future_letter",
+    "description": "Create a future letter with an ISO 8601 revisit date.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "title": {"type": "string"},
+        "content": {"type": "string"},
+        "revisit_at": {"type": "string", "format": "date-time"},
+        "context": {"type": "string"},
+        "tags": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["content", "revisit_at"]
+    }
+  },
+  {
+    "name": "search_memories",
+    "description": "Search only the current user's private DFM entries.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "q": {"type": "string"},
+        "kind": {"type": "string", "enum": ["letter", "note", "accomplishment", "reflection", "memory", "proud_moment", "time_capsule"]}
+      },
+      "required": ["q"]
+    }
+  },
+  {
+    "name": "get_entries",
+    "description": "List the user's recent DFM entries, optionally filtered by kind.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "kind": {"type": "string", "enum": ["letter", "note", "accomplishment", "reflection", "memory", "proud_moment", "time_capsule"]},
+        "limit": {"type": "integer"}
+      }
+    }
+  },
+  {
+    "name": "get_timeline",
+    "description": "Get entries grouped by day for comparing past and present.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "from": {"type": "string", "format": "date-time"},
+        "to": {"type": "string", "format": "date-time"}
+      }
+    }
+  },
+  {
+    "name": "read_letter",
+    "description": "Read a future letter by its journal ID.",
+    "parameters": {
+      "type": "object",
+      "properties": {"entry_id": {"type": "string"}},
+      "required": ["entry_id"]
+    }
+  },
+  {
+    "name": "get_themes",
+    "description": "Get top user-created tags and counts as a non-AI approximation of themes.",
+    "parameters": {"type": "object", "properties": {}}
+  },
+  {
+    "name": "get_account",
+    "description": "Get account context for the owner of the configured DFM API key.",
+    "parameters": {"type": "object", "properties": {}}
+  }
+]
