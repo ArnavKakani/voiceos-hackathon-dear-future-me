@@ -1,0 +1,3 @@
+-- This migration version was already applied to the hosted project before the
+-- repository's retained migration history began. It is intentionally a no-op
+-- so local and remote Supabase migration histories can be reconciled safely.
