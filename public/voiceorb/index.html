@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>orb</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Embed overrides: transparent so the cream app background shows through,
+     and hide the demo's own chrome — the native app drives state via
+     window.setState(). The elements stay in the DOM (just hidden) so app.js's
+     getElementById lookups don't hit null. */
+  html, body { background: transparent !important; margin: 0; height: 100%; overflow: hidden; }
+  #container { background: transparent !important; }
+  #controls, #stateControls, #themeToggle, #status, #startBtn { display: none !important; }
+  #canvas { display: block; width: 100vw; height: 100vh; top: 0 !important; left: 0 !important; }
+</style>
+</head>
+<body>
+  <div id="themeToggle"><button id="themeBtn" aria-label="theme"></button></div>
+  <div id="container">
+    <canvas id="canvas"></canvas>
+    <div id="controls">
+      <button id="startBtn"></button>
+      <div id="status"></div>
+      <div id="stateControls">
+        <div class="state-buttons">
+          <button class="state-btn active" data-state="idle"></button>
+          <button class="state-btn" data-state="listening"></button>
+          <button class="state-btn" data-state="thinking"></button>
+          <button class="state-btn" data-state="speaking"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="three.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    window.addEventListener('message', function (event) {
+      if (event.origin !== window.location.origin) return;
+      var payload = event.data || {};
+      var allowed = ['idle', 'listening', 'thinking', 'speaking'];
+      if (payload.type === 'dfm-voiceorb-state' && allowed.indexOf(payload.state) !== -1 && window.setState) {
+        window.setState(payload.state);
+      }
+    });
+  </script>
+</body>
+</html>
