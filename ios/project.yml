@@ -1,0 +1,81 @@
+name: DearFutureMe
+options:
+  bundleIdPrefix: com.neurohealth
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    # Personal Team (free Apple ID), extracted from the Apple Development
+    # certificate on this Mac. Pinned here so `xcodegen generate` never
+    # wipes the signing config again.
+    DEVELOPMENT_TEAM: MMYYY8U9V2
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  DearFutureMe:
+    type: application
+    platform: iOS
+    sources:
+      - path: DearFutureMe
+        excludes:
+          - "Fonts/*"
+          - "WebOrb/*"
+      - path: DearFutureMe/Fonts
+        type: folder
+        buildPhase: resources
+      # The WebGL orb assets, kept as a folder reference so index.html can
+      # load ./three.min.js and ./app.js relative to it inside the bundle.
+      - path: DearFutureMe/WebOrb
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.neurohealth.dearfutureme
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+    info:
+      path: DearFutureMe/Info.plist
+      properties:
+        CFBundleDisplayName: Dear Future Me
+        NSMicrophoneUsageDescription: "Dear Future Me listens so you can speak reflections and letters to your future self."
+        NSSpeechRecognitionUsageDescription: "Your speech is transcribed on this device so it can be saved as your own words."
+        UIAppFonts:
+          - Fonts/Comfortaa.ttf
+          - Fonts/Caveat.ttf
+        CFBundleURLTypes:
+          - CFBundleURLName: com.neurohealth.dearfutureme
+            CFBundleURLSchemes:
+              - dearfutureme
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+    dependencies:
+      - target: DFMWidget
+        embed: true
+
+  DFMWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: DFMWidget
+      - path: DearFutureMe/Fonts
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.neurohealth.dearfutureme.DFMWidget
+        SKIP_INSTALL: YES
+    info:
+      path: DFMWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Dear Future Me
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        UIAppFonts:
+          - Fonts/Comfortaa.ttf
+          - Fonts/Caveat.ttf

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- viewport-fit=cover is load-bearing: without it WebKit shrinks the layout
+     viewport by the host view's safe-area insets (852 → 759pt on an iPhone 15
+     Pro) and parks the page at a non-zero scroll offset, so a canvas sized in
+     % no longer lines up with the WKWebView's frame and the orb renders
+     off-centre / clipped. `contentInsetAdjustmentBehavior = .never` does NOT
+     prevent this — it only governs scrolling, not the unobscured content rect. -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>orb</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Embed overrides: transparent so the cream app background shows through,
+     and hide the demo's own chrome — the native app drives state via
+     window.setState(). The elements stay in the DOM (just hidden) so app.js's
+     getElementById lookups don't hit null. */
+  /* Size by 100% (chains from the real WKWebView frame), NOT vh/vw. The host
+     view is full-screen (VoiceSessionView.swift) so the layout viewport, the
+     frame and the canvas are all the same box — which is the only arrangement
+     in which `width=device-width` cannot mis-scale the canvas. */
+  html, body { background: transparent !important; margin: 0; width: 100%; height: 100%; overflow: hidden; }
+  #container { background: transparent !important; width: 100%; height: 100%; }
+  #controls, #stateControls, #themeToggle, #status, #startBtn { display: none !important; }
+  /* position:fixed pins the canvas to the layout viewport, so any residual
+     scroll offset of the document can never slide the orb up or down. */
+  #canvas { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+  <div id="themeToggle"><button id="themeBtn" aria-label="theme"></button></div>
+  <div id="container">
+    <canvas id="canvas"></canvas>
+    <div id="controls">
+      <button id="startBtn"></button>
+      <div id="status"></div>
+      <div id="stateControls">
+        <div class="state-buttons">
+          <button class="state-btn active" data-state="idle"></button>
+          <button class="state-btn" data-state="listening"></button>
+          <button class="state-btn" data-state="thinking"></button>
+          <button class="state-btn" data-state="speaking"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="three.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
